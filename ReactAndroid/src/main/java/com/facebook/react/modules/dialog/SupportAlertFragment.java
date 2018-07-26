@@ -9,17 +9,20 @@ package com.facebook.react.modules.dialog;
 
 import javax.annotation.Nullable;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
 
+import com.microsoft.intune.mam.client.support.v4.app.MAMDialogFragment;
+
 /**
  * {@link AlertFragment} for apps that use the Support FragmentActivity and FragmentManager
  * for legacy reasons.
  */
-public class SupportAlertFragment extends DialogFragment implements DialogInterface.OnClickListener {
+public class SupportAlertFragment extends MAMDialogFragment implements DialogInterface.OnClickListener {
 
   private final @Nullable DialogModule.AlertFragmentListener mListener;
 
@@ -27,13 +30,14 @@ public class SupportAlertFragment extends DialogFragment implements DialogInterf
       mListener = null;
   }
 
+  @SuppressLint("ValidFragment")
   public SupportAlertFragment(@Nullable DialogModule.AlertFragmentListener listener, Bundle arguments) {
     mListener = listener;
     setArguments(arguments);
   }
 
   @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
+  public Dialog onMAMCreateDialog(Bundle savedInstanceState) {
     return AlertFragment.createDialog(getActivity(), getArguments(), this);
   }
 

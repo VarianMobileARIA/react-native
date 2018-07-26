@@ -18,13 +18,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 
+import com.microsoft.intune.mam.client.app.MAMDialogFragment;
+
 import java.util.Calendar;
 import java.util.Locale;
 
 import javax.annotation.Nullable;
 
 @SuppressWarnings("ValidFragment")
-public class TimePickerDialogFragment extends DialogFragment {
+public class TimePickerDialogFragment extends MAMDialogFragment {
 
   @Nullable
   private OnTimeSetListener mOnTimeSetListener;
@@ -32,7 +34,7 @@ public class TimePickerDialogFragment extends DialogFragment {
   private OnDismissListener mOnDismissListener;
 
   @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
+  public Dialog onMAMCreateDialog(Bundle savedInstanceState) {
     final Bundle args = getArguments();
     return createDialog(args, getActivity(), mOnTimeSetListener);
   }

@@ -16,8 +16,10 @@ import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
+import com.microsoft.intune.mam.client.support.v4.app.MAMDialogFragment;
+
 @SuppressWarnings("ValidFragment")
-public class SupportTimePickerDialogFragment extends DialogFragment {
+public class SupportTimePickerDialogFragment extends MAMDialogFragment {
 
   @Nullable
   private OnTimeSetListener mOnTimeSetListener;
@@ -25,7 +27,7 @@ public class SupportTimePickerDialogFragment extends DialogFragment {
   private OnDismissListener mOnDismissListener;
 
   @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
+  public Dialog onMAMCreateDialog(Bundle savedInstanceState) {
     final Bundle args = getArguments();
     return TimePickerDialogFragment.createDialog(args, getActivity(), mOnTimeSetListener);
   }

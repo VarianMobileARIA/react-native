@@ -17,12 +17,13 @@ import android.view.KeyEvent;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
+import com.microsoft.intune.mam.client.support.v4.app.MAMFragmentActivity;
 
 /**
  * Base Activity for React Native applications. Like {@link ReactActivity} but extends
  * {@link FragmentActivity} instead of {@link android.app.Activity}.
  */
-public abstract class ReactFragmentActivity extends FragmentActivity implements
+public abstract class ReactFragmentActivity extends MAMFragmentActivity implements
   DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
   private final ReactActivityDelegate mDelegate;
@@ -48,31 +49,31 @@ public abstract class ReactFragmentActivity extends FragmentActivity implements
   }
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onMAMCreate(Bundle savedInstanceState) {
+    super.onMAMCreate(savedInstanceState);
     mDelegate.onCreate(savedInstanceState);
   }
 
   @Override
-  protected void onPause() {
-    super.onPause();
+  public void onMAMPause() {
+    super.onMAMPause();
     mDelegate.onPause();
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
+  public void onMAMResume() {
+    super.onMAMResume();
     mDelegate.onResume();
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  public void onMAMDestroy() {
+    super.onMAMDestroy();
     mDelegate.onDestroy();
   }
 
   @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  public void onMAMActivityResult(int requestCode, int resultCode, Intent data) {
     mDelegate.onActivityResult(requestCode, resultCode, data);
   }
 
@@ -94,9 +95,9 @@ public abstract class ReactFragmentActivity extends FragmentActivity implements
   }
 
   @Override
-  public void onNewIntent(Intent intent) {
+  public void onMAMNewIntent(Intent intent) {
     if (!mDelegate.onNewIntent(intent)) {
-      super.onNewIntent(intent);
+      super.onMAMNewIntent(intent);
     }
   }
 

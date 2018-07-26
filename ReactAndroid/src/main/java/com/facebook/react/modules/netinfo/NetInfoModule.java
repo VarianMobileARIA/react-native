@@ -24,6 +24,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.microsoft.intune.mam.client.content.MAMBroadcastReceiver;
 
 import static com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter;
 
@@ -242,7 +243,7 @@ public class NetInfoModule extends ReactContextBaseJavaModule
    * Class that receives intents whenever the connection type changes.
    * NB: It is possible on some devices to receive certain connection type changes multiple times.
    */
-  private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
+  private class ConnectivityBroadcastReceiver extends MAMBroadcastReceiver {
 
     //TODO: Remove registered check when source of crash is found. t9846865
     private boolean isRegistered = false;
@@ -256,7 +257,7 @@ public class NetInfoModule extends ReactContextBaseJavaModule
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onMAMReceive(Context context, Intent intent) {
       if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
         updateAndSendConnectionType();
       }

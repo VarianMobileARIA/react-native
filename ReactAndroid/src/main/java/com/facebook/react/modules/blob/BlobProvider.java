@@ -16,11 +16,13 @@ import android.support.annotation.Nullable;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.ReactContext;
+import com.microsoft.intune.mam.client.content.MAMContentProvider;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public final class BlobProvider extends ContentProvider {
+public final class BlobProvider extends MAMContentProvider {
 
   @Override
   public boolean onCreate() {
@@ -28,7 +30,7 @@ public final class BlobProvider extends ContentProvider {
   }
 
   @Override
-  public @Nullable Cursor query(
+  public @Nullable Cursor queryMAM(
       Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
     return null;
   }
@@ -39,22 +41,22 @@ public final class BlobProvider extends ContentProvider {
   }
 
   @Override
-  public @Nullable Uri insert(Uri uri, ContentValues values) {
+  public @Nullable Uri insertMAM(Uri uri, ContentValues values) {
     return null;
   }
 
   @Override
-  public int delete(Uri uri, String selection, String[] selectionArgs) {
+  public int deleteMAM(Uri uri, String selection, String[] selectionArgs) {
     return 0;
   }
 
   @Override
-  public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+  public int updateMAM(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
     return 0;
   }
 
   @Override
-  public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
+  public ParcelFileDescriptor openFileMAM(Uri uri, String mode) throws FileNotFoundException {
     if (!mode.equals("r")) {
       throw new FileNotFoundException("Cannot open " + uri.toString() + " in mode '" + mode + "'");
     }

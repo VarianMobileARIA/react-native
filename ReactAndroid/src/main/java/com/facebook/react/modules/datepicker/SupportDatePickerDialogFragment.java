@@ -17,8 +17,10 @@ import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
+import com.microsoft.intune.mam.client.support.v4.app.MAMDialogFragment;
+
 @SuppressLint("ValidFragment")
-public class SupportDatePickerDialogFragment extends DialogFragment {
+public class SupportDatePickerDialogFragment extends MAMDialogFragment {
 
   @Nullable
   private OnDateSetListener mOnDateSetListener;
@@ -26,7 +28,7 @@ public class SupportDatePickerDialogFragment extends DialogFragment {
   private OnDismissListener mOnDismissListener;
 
   @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
+  public Dialog onMAMCreateDialog(Bundle savedInstanceState) {
     final Bundle args = getArguments();
     return DatePickerDialogFragment.createDialog(args, getActivity(), mOnDateSetListener);
   }
