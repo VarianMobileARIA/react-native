@@ -4,6 +4,10 @@ buildscript {
     repositories {
         jcenter()
         mavenLocal()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
@@ -22,6 +26,10 @@ allprojects {
         def androidSdk = System.getenv("ANDROID_SDK")
         maven {
             url "$androidSdk/extras/m2repository/"
+        }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
         }
     }
 }
