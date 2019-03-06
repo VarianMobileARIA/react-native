@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -20,9 +20,11 @@ import com.facebook.react.modules.core.PermissionListener;
 import com.microsoft.intune.mam.client.support.v4.app.MAMFragmentActivity;
 
 /**
- * Base Activity for React Native applications. Like {@link ReactActivity} but extends
- * {@link FragmentActivity} instead of {@link android.app.Activity}.
+ * @deprecated
+ * ReactFragmentActivity will be removed in 0.57 release.
+ * Use {@link ReactActivity} instead.
  */
+@Deprecated
 public abstract class ReactFragmentActivity extends MAMFragmentActivity implements
   DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
