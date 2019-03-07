@@ -314,6 +314,7 @@ android {
 }
 
 dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
     api 'com.facebook.infer.annotation:infer-annotation:0.11.2'
     api 'javax.inject:javax.inject:1'
     api 'com.android.support:appcompat-v7:28.0.0'
@@ -324,8 +325,8 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
     api "com.squareup.okhttp3:okhttp-urlconnection:${OKHTTP_VERSION}"
     api 'com.squareup.okio:okio:1.15.0'
+    api 'com.android.support:appcompat-v7:28.+'
     compile 'org.webkit:android-jsc:r174650'
-    compile 'com.android.support:appcompat-v7:26.+'
 
     testImplementation "junit:junit:${JUNIT_VERSION}"
     testImplementation "org.powermock:powermock-api-mockito:${POWERMOCK_VERSION}"
