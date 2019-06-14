@@ -153,7 +153,7 @@ void CatalystInstanceImpl::initializeBridge(
        moduleMessageQueue_));
 
   instance_->initializeBridge(
-    folly::make_unique<JInstanceCallback>(
+    std::make_unique<JInstanceCallback>(
     callback,
     moduleMessageQueue_),
     jseh->getExecutorFactory(),
@@ -197,6 +197,8 @@ void CatalystInstanceImpl::jniLoadScriptFromAssets(
       sourceURL,
       loadSynchronously);
     return;
+  } else if (Instance::isIndexedRAMBundle(&script)) {
+    instance_->loadRAMBundleFromString(std::move(script), sourceURL);
   } else {
     instance_->loadScriptFromString(std::move(script), sourceURL, loadSynchronously);
   }

@@ -235,7 +235,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
                              };
 
           #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000 /* __IPHONE_11_0 */
-            if (@available(iOS 11.0, *)) {
+            if (@available(iOS 11.0, tvOS 11.0, *)) {
               NSDictionary<NSString *, NSString *> * iOS11extras = @{@"username": UITextContentTypeUsername,
                                                                      @"password": UITextContentTypePassword};
 
@@ -247,7 +247,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
           #endif
 
           #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 120000 /* __IPHONE_12_0 */
-            if (@available(iOS 12.0, *)) {
+            if (@available(iOS 12.0, tvOS 12.0, *)) {
               NSDictionary<NSString *, NSString *> * iOS12extras = @{@"newPassword": UITextContentTypeNewPassword,
                                                                      @"oneTimeCode": UITextContentTypeOneTimeCode};
 
@@ -281,6 +281,24 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
       [textInputView reloadInputViews];
     }
   }
+}
+
+- (BOOL)secureTextEntry {
+  return self.backedTextInputView.secureTextEntry;
+}
+
+- (void)setSecureTextEntry:(BOOL)secureTextEntry {
+  UIView<RCTBackedTextInputViewProtocol> *textInputView = self.backedTextInputView;
+    
+  if (textInputView.secureTextEntry != secureTextEntry) {
+    textInputView.secureTextEntry = secureTextEntry;
+      
+    // Fix #5859, see https://stackoverflow.com/questions/14220187/uitextfield-has-trailing-whitespace-after-securetextentry-toggle/22537788#22537788
+    NSAttributedString *originalText = [textInputView.attributedText copy];
+    self.backedTextInputView.attributedText = [NSAttributedString new];
+    self.backedTextInputView.attributedText = originalText;
+  }
+    
 }
 
 #pragma mark - RCTBackedTextInputDelegate
@@ -386,18 +404,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
     }
   }
 
-  if (range.location + range.length > _predictedText.length) {
-    // _predictedText got out of sync in a bad way, so let's just force sync it.  Haven't been able to repro this, but
-    // it's causing a real crash here: #6523822
+  NSString *previousText = backedTextInputView.attributedText.string ?: @"";
+  
+  if (range.location + range.length > backedTextInputView.attributedText.string.length) {
     _predictedText = backedTextInputView.attributedText.string;
-  }
-
-  NSString *previousText = [_predictedText substringWithRange:range] ?: @"";
-
-  if (!_predictedText || backedTextInputView.attributedText.string.length == 0) {
-    _predictedText = text;
   } else {
-    _predictedText = [_predictedText stringByReplacingCharactersInRange:range withString:text];
+    _predictedText = [backedTextInputView.attributedText.string stringByReplacingCharactersInRange:range withString:text];
   }
 
   if (_onTextInput) {
@@ -432,7 +444,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
     [self textInputShouldChangeTextInRange:predictionRange replacementText:replacement];
     // JS will assume the selection changed based on the location of our shouldChangeTextInRange, so reset it.
     [self textInputDidChangeSelection];
-    _predictedText = backedTextInputView.attributedText.string;
   }
 
   _nativeEventCount++;

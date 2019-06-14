@@ -9,9 +9,9 @@ package com.facebook.react;
 
 import javax.annotation.Nullable;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
@@ -22,7 +22,7 @@ import com.microsoft.intune.mam.client.app.MAMActivity;
 /**
  * Base Activity for React Native applications.
  */
-public abstract class ReactActivity extends MAMActivity
+public abstract class ReactActivity extends AppCompatActivity
     implements DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
   private final ReactActivityDelegate mDelegate;

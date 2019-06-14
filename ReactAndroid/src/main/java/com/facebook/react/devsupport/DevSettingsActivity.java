@@ -24,6 +24,6 @@ public class DevSettingsActivity extends MAMPreferenceActivity {
   public void onMAMCreate(Bundle savedInstanceState) {
     super.onMAMCreate(savedInstanceState);
     setTitle(getApplication().getResources().getString(R.string.catalyst_settings_title));
-    addPreferencesFromResource(R.xml.preferences);
+    addPreferencesFromResource(R.xml.rn_dev_preferences);
   }
 }

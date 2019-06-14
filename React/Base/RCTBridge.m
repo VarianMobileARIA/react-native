@@ -226,6 +226,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   [self invalidate];
 }
 
+- (void)setRCTTurboModuleLookupDelegate:(id<RCTTurboModuleLookupDelegate>)turboModuleLookupDelegate
+{
+  [self.batchedBridge setRCTTurboModuleLookupDelegate:turboModuleLookupDelegate];
+}
+
 - (void)didReceiveReloadCommand
 {
   [self reload];
@@ -290,6 +295,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     // WARNING: Invalidation is async, so it may not finish before re-setting up the bridge,
     // causing some issues. TODO: revisit this post-Fabric/TurboModule.
     [self invalidate];
+    // Reload is a special case, do not preserve launchOptions and treat reload as a fresh start
+    self->_launchOptions = nil;
     [self setUp];
   });
 }
@@ -361,6 +368,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
       [batchedBridge invalidate];
     });
   }
+}
+
+- (void)updateModuleWithInstance:(id<RCTBridgeModule>)instance
+{
+  [self.batchedBridge updateModuleWithInstance:instance];
 }
 
 - (void)registerAdditionalModuleClasses:(NSArray<Class> *)modules

@@ -68,8 +68,11 @@ jest
   .mock('AnimatedImplementation', () => {
     const AnimatedImplementation = jest.requireActual('AnimatedImplementation');
     const oldCreate = AnimatedImplementation.createAnimatedComponent;
-    AnimatedImplementation.createAnimatedComponent = function(Component) {
-      const Wrapped = oldCreate(Component);
+    AnimatedImplementation.createAnimatedComponent = function(
+      Component,
+      defaultProps,
+    ) {
+      const Wrapped = oldCreate(Component, defaultProps);
       Wrapped.__skipSetNativeProps_FOR_TESTS_ONLY = true;
       return Wrapped;
     };
@@ -115,6 +118,12 @@ const mockNativeModules = {
   BuildInfo: {
     appVersion: '0',
     buildVersion: '0',
+    getConstants() {
+      return {
+        appVersion: '0',
+        buildVersion: '0',
+      };
+    },
   },
   Clipboard: {
     setString: jest.fn(),
@@ -171,6 +180,7 @@ const mockNativeModules = {
     addEventListener: jest.fn(),
     getInitialURL: jest.fn(() => Promise.resolve()),
     removeEventListener: jest.fn(),
+    sendIntent: jest.fn(),
   },
   LocationObserver: {
     getCurrentPosition: jest.fn(),

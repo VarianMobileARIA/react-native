@@ -17,7 +17,6 @@ const React = require('React');
 const ReactNative = require('ReactNative');
 const StyleSheet = require('StyleSheet');
 const TVEventHandler = require('TVEventHandler');
-const TouchEventUtils = require('fbjs/lib/TouchEventUtils');
 const UIManager = require('UIManager');
 const View = require('View');
 
@@ -26,6 +25,19 @@ const normalizeColor = require('normalizeColor');
 
 import type {PressEvent} from 'CoreEventTypes';
 import type {EdgeInsetsProp} from 'EdgeInsetsPropType';
+
+const extractSingleTouch = nativeEvent => {
+  const touches = nativeEvent.touches;
+  const changedTouches = nativeEvent.changedTouches;
+  const hasTouches = touches && touches.length > 0;
+  const hasChangedTouches = changedTouches && changedTouches.length > 0;
+
+  return !hasTouches && hasChangedTouches
+    ? changedTouches[0]
+    : hasTouches
+      ? touches[0]
+      : nativeEvent;
+};
 
 /**
  * `Touchable`: Taps done right.
@@ -472,6 +484,7 @@ const TouchableMixin = {
    * Place as callback for a DOM element's `onResponderRelease` event.
    */
   touchableHandleResponderRelease: function(e: PressEvent) {
+    this.pressInLocation = null;
     this._receiveSignal(Signals.RESPONDER_RELEASE, e);
   },
 
@@ -479,6 +492,7 @@ const TouchableMixin = {
    * Place as callback for a DOM element's `onResponderTerminate` event.
    */
   touchableHandleResponderTerminate: function(e: PressEvent) {
+    this.pressInLocation = null;
     this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
   },
 
@@ -486,14 +500,6 @@ const TouchableMixin = {
    * Place as callback for a DOM element's `onResponderMove` event.
    */
   touchableHandleResponderMove: function(e: PressEvent) {
-    // Not enough time elapsed yet, wait for highlight -
-    // this is just a perf optimization.
-    if (
-      this.state.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN
-    ) {
-      return;
-    }
-
     // Measurement may not have returned yet.
     if (!this.state.touchable.positionOnActivate) {
       return;
@@ -520,13 +526,13 @@ const TouchableMixin = {
       : null;
 
     if (hitSlop) {
-      pressExpandLeft += hitSlop.left;
-      pressExpandTop += hitSlop.top;
-      pressExpandRight += hitSlop.right;
-      pressExpandBottom += hitSlop.bottom;
+      pressExpandLeft += hitSlop.left || 0;
+      pressExpandTop += hitSlop.top || 0;
+      pressExpandRight += hitSlop.right || 0;
+      pressExpandBottom += hitSlop.bottom || 0;
     }
 
-    const touch = TouchEventUtils.extractSingleTouch(e.nativeEvent);
+    const touch = extractSingleTouch(e.nativeEvent);
     const pageX = touch && touch.pageX;
     const pageY = touch && touch.pageY;
 
@@ -554,9 +560,13 @@ const TouchableMixin = {
           dimensionsOnActivate.height +
           pressExpandBottom;
     if (isTouchWithinActive) {
+      const prevState = this.state.touchable.touchState;
       this._receiveSignal(Signals.ENTER_PRESS_RECT, e);
       const curState = this.state.touchable.touchState;
-      if (curState === States.RESPONDER_INACTIVE_PRESS_IN) {
+      if (
+        curState === States.RESPONDER_INACTIVE_PRESS_IN &&
+        prevState !== States.RESPONDER_INACTIVE_PRESS_IN
+      ) {
         // fix for t7967420
         this._cancelLongPressDelayTimeout();
       }
@@ -571,7 +581,8 @@ const TouchableMixin = {
    * visually distinguish the `VisualRect` so that the user knows that it
    * currently has the focus. Most platforms only support a single element being
    * focused at a time, in which case there may have been a previously focused
-   * element that was blurred just prior to this.
+   * element that was blurred just prior to this. This can be overridden when
+   * using `Touchable.Mixin.withoutDefaultFocusAndBlur`.
    */
   touchableHandleFocus: function(e: Event) {
     this.props.onFocus && this.props.onFocus(e);
@@ -582,6 +593,8 @@ const TouchableMixin = {
    * visually distinguish the `VisualRect` so that the user knows that it
    * no longer has focus. Most platforms only support a single element being
    * focused at a time, in which case the focus may have moved to another.
+   * This can be overridden when using
+   * `Touchable.Mixin.withoutDefaultFocusAndBlur`.
    */
   touchableHandleBlur: function(e: Event) {
     this.props.onBlur && this.props.onBlur(e);
@@ -779,7 +792,7 @@ const TouchableMixin = {
   },
 
   _savePressInLocation: function(e: PressEvent) {
-    const touch = TouchEventUtils.extractSingleTouch(e.nativeEvent);
+    const touch = extractSingleTouch(e.nativeEvent);
     const pageX = touch && touch.pageX;
     const pageY = touch && touch.pageY;
     const locationX = touch && touch.locationX;
@@ -826,7 +839,12 @@ const TouchableMixin = {
       this._cancelLongPressDelayTimeout();
     }
 
-    if (!IsActive[curState] && IsActive[nextState]) {
+    const isInitialTransition =
+      curState === States.NOT_RESPONDER &&
+      nextState === States.RESPONDER_INACTIVE_PRESS_IN;
+
+    const isActiveTransition = !IsActive[curState] && IsActive[nextState];
+    if (isInitialTransition || isActiveTransition) {
       this._remeasureMetricsOnActivation();
     }
 
@@ -888,7 +906,22 @@ const TouchableMixin = {
       }
     }
   },
+
+  withoutDefaultFocusAndBlur: {},
 };
+
+/**
+ * Provide an optional version of the mixin where `touchableHandleFocus` and
+ * `touchableHandleBlur` can be overridden. This allows appropriate defaults to
+ * be set on TV platforms, without breaking existing implementations of
+ * `Touchable`.
+ */
+const {
+  touchableHandleFocus,
+  touchableHandleBlur,
+  ...TouchableMixinWithoutDefaultFocusAndBlur
+} = TouchableMixin;
+TouchableMixin.withoutDefaultFocusAndBlur = TouchableMixinWithoutDefaultFocusAndBlur;
 
 const Touchable = {
   Mixin: TouchableMixin,
