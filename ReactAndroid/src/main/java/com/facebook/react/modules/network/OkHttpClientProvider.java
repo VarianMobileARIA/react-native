@@ -99,24 +99,6 @@ public class OkHttpClientProvider {
     return client.cache(cache);
   }
 
-  public static OkHttpClient.Builder createClientBuilder(Context context) {
-    int cacheSize = 10 * 1024 * 1024; // 10 Mo
-    return createClientBuilder(context, cacheSize);
-  }
-
-  public static OkHttpClient.Builder createClientBuilder(Context context, int cacheSize) {
-    OkHttpClient.Builder client = createClientBuilder();
-
-    if (cacheSize == 0) {
-      return client;
-    }
-
-    File cacheDirectory = new File(context.getCacheDir(), "http-cache");
-    Cache cache = new Cache(cacheDirectory, cacheSize);
-
-    return client.cache(cache);
-  }
-
   /*
     On Android 4.1-4.4 (API level 16 to 19) TLS 1.1 and 1.2 are
     available but not enabled by default. The following method

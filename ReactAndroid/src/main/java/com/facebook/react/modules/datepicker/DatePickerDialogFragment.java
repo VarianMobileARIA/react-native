@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
-import com.microsoft.intune.mam.client.app.MAMDialogFragment;
+import com.microsoft.intune.mam.client.support.v4.app.MAMDialogFragment;
 
 @SuppressLint("ValidFragment")
 public class DatePickerDialogFragment extends MAMDialogFragment {

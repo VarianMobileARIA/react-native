@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 
-import com.microsoft.intune.mam.client.app.MAMDialogFragment;
+import com.microsoft.intune.mam.client.support.v4.app.MAMDialogFragment;
 
 import java.util.Calendar;
 import java.util.Locale;
