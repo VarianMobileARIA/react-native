@@ -7,11 +7,13 @@
 
 package com.facebook.react;
 
+import com.microsoft.intune.mam.client.app.MAMActivity;
+
 /**
  * @deprecated
  * ReactFragmentActivity will be removed in 0.59 release.
  * Use {@link ReactActivity} instead.
  */
 @Deprecated
-public abstract class ReactFragmentActivity extends ReactActivity {
+public abstract class ReactFragmentActivity extends MAMActivity {
 }

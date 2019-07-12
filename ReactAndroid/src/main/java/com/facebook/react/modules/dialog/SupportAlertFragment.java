@@ -15,8 +15,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
-
-import com.microsoft.intune.mam.client.support.v4.app.MAMDialogFragment;
+import com.microsoft.intune.mam.client.app.MAMDialogFragment;
 
 /**
  * {@link AlertFragment} for apps that use the Support FragmentActivity and FragmentManager

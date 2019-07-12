@@ -22,7 +22,7 @@ import com.microsoft.intune.mam.client.app.MAMActivity;
 /**
  * Base Activity for React Native applications.
  */
-public abstract class ReactActivity extends AppCompatActivity
+public abstract class ReactActivity extends MAMActivity
     implements DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
   private final ReactActivityDelegate mDelegate;
