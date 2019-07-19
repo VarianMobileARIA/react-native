@@ -26,6 +26,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.annotations.VisibleForTesting;
 import com.facebook.react.module.annotations.ReactModule;
+import com.microsoft.intune.mam.client.support.v4.app.MAMFragmentActivity;
 
 import javax.annotation.Nullable;
 
@@ -92,7 +93,7 @@ public class TimePickerDialogModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void open(@Nullable final ReadableMap options, Promise promise) {
 
-    FragmentActivity activity = (FragmentActivity) getCurrentActivity();
+    MAMFragmentActivity activity = (MAMFragmentActivity) getCurrentActivity();
     if (activity == null) {
       promise.reject(
           ERROR_NO_ACTIVITY,
