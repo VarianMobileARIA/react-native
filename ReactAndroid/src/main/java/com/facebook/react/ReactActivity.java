@@ -18,12 +18,14 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
 import com.microsoft.intune.mam.client.app.MAMActivity;
+import com.microsoft.intune.mam.client.support.v4.app.MAMFragmentActivity;
+import com.microsoft.intune.mam.client.support.v7.app.MAMAppCompatActivity;
 
 
 /**
  * Base Activity for React Native applications.
  */
-public abstract class ReactActivity extends MAMActivity
+public abstract class ReactActivity extends MAMFragmentActivity
     implements DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
   private final ReactActivityDelegate mDelegate;
