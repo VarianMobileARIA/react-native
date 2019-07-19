@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import com.facebook.react.bridge.*;
 import com.facebook.react.common.annotations.VisibleForTesting;
 import com.facebook.react.module.annotations.ReactModule;
+import com.microsoft.intune.mam.client.support.v4.app.MAMFragmentActivity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -112,7 +113,7 @@ public class DatePickerDialogModule extends ReactContextBaseJavaModule {
    */
   @ReactMethod
   public void open(@Nullable final ReadableMap options, Promise promise) {
-    FragmentActivity activity = (FragmentActivity) getCurrentActivity();
+    MAMFragmentActivity activity = (MAMFragmentActivity) getCurrentActivity();
     if (activity == null) {
       promise.reject(
           ERROR_NO_ACTIVITY,
